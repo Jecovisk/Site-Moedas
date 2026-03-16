@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIEP 386 - Portal EcoCoin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-text">386 <span style="color: #28a745;">EcoCoin</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active-link">Início</a></li>
+                    <li><a href="loja.html">Loja</a></li>
+                    <li><a href="ranking.html">Ranking</a></li>
+                    <li><a href="perfil.html">Perfil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        
+        <section>
+            
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="Imagens/dia-do-estudante-01.jpg" style="width:100%">
+                    <div class="slide-text">
+                        <h2>Nova EcoLoja Inaugurada!</h2>
+                        <p>Troque suas moedas por materiais toda quarta-feira.</p>
+                    </div>
+                </div>
+                <div class="mySlides fade">
+                    <img src="Imagens/dia-do-estudante-me.webp" style="width:100%" alt="Alunos participando da Gincana">
+                    <div class="slide-text">
+                        <h2>Gincana de Reciclagem</h2>
+                        <p>A Turma 3001 lidera com 15kg de tampinhas coletadas!</p>
+                    </div>
+                </div>
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                <div class="dot-container">
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+            </div>
+
+            <div class="card card-dinamico">
+                <span class="card-title">📅 Próximos Eventos</span>
+                <div class="abas-container">
+                    <button class="tab-btn active" onclick="alternarConteudo('evento', 1, this)">1</button>
+                    <button class="tab-btn" onclick="alternarConteudo('evento', 2, this)">2</button>
+                </div>
+
+                <div id="evento-1" class="tab-content active">
+                    <div class="news-item">
+                        <span class="categoria-tag tag-azul">Gincana</span>
+                        <h3>🏆 Batalha de Tampinhas</h3>
+                        <p>A pesagem oficial acontece nesta sexta no pátio.</p>
+                        <button class="btn-inscrever" onclick="inscreverEvento('https://forms.gle/exemplo1')">Inscrever-se</button>
+                    </div>
+                </div>
+                <div id="evento-2" class="tab-content">
+                    <div class="news-item">
+                        <span class="categoria-tag tag-azul">Cultura</span>
+                        <h3>🎤 Seleção da Rádio</h3>
+                        <p>Venha ser o novo locutor do intervalo escolar.</p>
+                        <button class="btn-inscrever" onclick="inscreverEvento('https://forms.gle/exemplo2')">Inscrever-se</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-dinamico">
+                <span class="card-title">🛒 Itens na Loja</span>
+                <div class="abas-container">
+                    <button class="tab-btn active" onclick="alternarConteudo('item', 1, this)">1</button>
+                    <button class="tab-btn" onclick="alternarConteudo('item', 2, this)">2</button>
+                </div>
+
+                <div id="item-1" class="tab-content active">
+                    <div class="news-item">
+                        <span class="categoria-tag tag-verde">Lazer</span>
+                        <h3>🎟️ Vale-Cinema</h3>
+                        <p>Preço: 50 Moedas | Estoque: 10</p>
+                        <button class="btn-comprar" onclick="comprarItem('https://forms.gle/comprar1')">🛒 Comprar Agora</button>
+                    </div>
+                </div>
+                <div id="item-2" class="tab-content">
+                    <div class="news-item">
+                        <span class="categoria-tag tag-verde">Material</span>
+                        <h3>📓 Caderno CIEP</h3>
+                        <p>Preço: 80 Moedas | Estoque: 5</p>
+                        <button class="btn-comprar" onclick="comprarItem('https://forms.gle/comprar2')">🛒 Comprar Agora</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside>
+            <div class="card">
+                <span class="card-title">Ranking Alunos</span>
+                
+                <div class="filtro-container">
+                    <select id="filtroTurma" onchange="filtrarRanking()">
+                        <option value="todas">Todas as Turmas</option>
+                        <option value="1001">1001</option>
+                        <option value="2001">2001</option>
+                        <option value="3001">3001</option>
+                    </select>
+                </div>
+
+                <div class="podium-container">
+                    <div class="podium-item silver" data-turma="2001">
+                        <div class="podium-bar">2º</div>
+                        <small>Maria C. (2001)</small>
+                    </div>
+                    <div class="podium-item gold" data-turma="3001">
+                        <div class="podium-bar">1º</div>
+                        <small>João S. (3001)</small>
+                    </div>
+                    <div class="podium-item bronze" data-turma="1001">
+                        <div class="podium-bar">3º</div>
+                        <small>Pedro A. (1001)</small>
+                    </div>
+                </div>
+
+                <ul class="ranking-list-extended">
+                    <li class="ranking-item" data-turma="3001"><span>4º Ana Clara</span> <span class="badge">110</span></li>
+                    <li class="ranking-item" data-turma="1001"><span>5º Lucas Lima</span> <span class="badge">105</span></li>
+                </ul>
+                <button class="btn-full" onclick="window.location.href='ranking.html'">Ver Ranking Completo</button>
+            </div>
+
+            <div class="card">
+                <span class="card-title">Ranking Turmas (Kg)</span>
+                <div class="turmas-container">
+                    <div class="turma-progresso-item">
+                        <div class="turma-info"><span>3001</span><strong>8.5kg</strong></div>
+                        <div class="barra-fundo"><div class="barra-preenchimento" style="width: 85%; background: var(--primary-blue);"></div></div>
+                    </div>
+                    <div class="turma-progresso-item">
+                        <div class="turma-info"><span>2001</span><strong>6.2kg</strong></div>
+                        <div class="barra-fundo"><div class="barra-preenchimento" style="width: 62%; background: var(--success-green);"></div></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

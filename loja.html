@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLoja - CIEP 386</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-text">386 <span style="color: #28a745;">EcoCoin</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="loja.html" class="active-link">Loja</a></li>
+                    <li><a href="ranking.html">Ranking</a></li>
+                    <li><a href="perfil.html">Perfil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content-single">
+        <div class="saldo-banner">
+            <div class="saldo-info">
+                <span>Seu Saldo Atual:</span>
+                <strong>🪙 120 EcoCoins</strong>
+            </div>
+            <div class="loja-filtro">
+                <select id="categoriaLoja">
+                    <option value="todos">Todos os Itens</option>
+                    <option value="material">Material Escolar</option>
+                    <option value="lanche">Lanches</option>
+                    <option value="lazer">Lazer / Vales</option>
+                </select>
+            </div>
+        </div>
+
+        <section class="produtos-grid">
+            
+            <div class="card item-loja-card">
+                <div class="img-produto">
+                    <img src="https://via.placeholder.com/200x150/f9f9f9/28a745?text=Vale-Cinema" alt="Vale Cinema">
+                </div>
+                <h3>Vale-Cinema</h3>
+                <p class="categoria-tag tag-azul">Lazer</p>
+                <span class="preco">🪙 50.00</span>
+                <button class="btn-comprar" onclick="comprarItem('https://forms.gle/exemplo1')">Resgatar</button>
+            </div>
+
+            <div class="card item-loja-card">
+                <div class="img-produto">
+                    <img src="https://via.placeholder.com/200x150/f9f9f9/28a745?text=Caderno" alt="Caderno">
+                </div>
+                <h3>Caderno CIEP</h3>
+                <p class="categoria-tag tag-verde">Material</p>
+                <span class="preco">🪙 80.00</span>
+                <button class="btn-comprar" onclick="comprarItem('https://forms.gle/exemplo2')">Resgatar</button>
+            </div>
+
+            <div class="card item-loja-card">
+                <div class="img-produto">
+                    <img src="https://via.placeholder.com/200x150/f9f9f9/28a745?text=Caneta" alt="Caneta">
+                </div>
+                <h3>Caneta Personalizada</h3>
+                <p class="categoria-tag tag-verde">Material</p>
+                <span class="preco">🪙 15.00</span>
+                <button class="btn-comprar" onclick="comprarItem('https://forms.gle/exemplo3')">Resgatar</button>
+            </div>
+
+            <div class="card item-loja-card">
+                <div class="img-produto">
+                    <img src="https://via.placeholder.com/200x150/f9f9f9/28a745?text=Lanche" alt="Lanche">
+                </div>
+                <h3>Lanche Especial</h3>
+                <p class="categoria-tag tag-laranja">Lanches</p>
+                <span class="preco">🪙 30.00</span>
+                <button class="btn-comprar" onclick="comprarItem('https://forms.gle/exemplo4')">Resgatar</button>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

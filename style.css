@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+:root {
+    --primary-blue: #0056b3;
+    --success-green: #28a745;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
+    --border: #dee2e6;
+}
+
+body { font-family: 'Roboto', sans-serif; background: var(--light-bg); margin: 0; color: #333; }
+
+/* HEADER */
+header { background: var(--white); border-bottom: 4px solid var(--primary-blue); padding: 15px 0; }
+.nav-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 20px; }
+nav ul { list-style: none; display: flex; gap: 20px; }
+nav a { text-decoration: none; color: #555; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; }
+
+/* GRID PRINCIPAL */
+.main-content { max-width: 1100px; margin: 30px auto; display: grid; grid-template-columns: 2fr 1fr; gap: 25px; padding: 0 20px; }
+
+/* CARDS */
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 25px; }
+.card-title { font-weight: bold; color: var(--primary-blue); border-left: 5px solid var(--primary-blue); padding-left: 10px; display: block; margin-bottom: 15px; }
+
+/* SLIDESHOW */
+.slideshow-container { position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 25px; }
+.mySlides { display: none; }
+.slide-text { position: absolute; bottom: 0; background: rgba(0,0,0,0.6); color: white; width: 100%; padding: 15px; }
+.prev, .next { cursor: pointer; position: absolute; top: 50%; color: white; padding: 16px; font-weight: bold; text-decoration: none; }
+.next { right: 0; }
+.dot-container { position: absolute; bottom: 10px; width: 100%; text-align: center; }
+.dot { height: 12px; width: 12px; background: #bbb; border-radius: 50%; display: inline-block; cursor: pointer; }
+.dot.active { background: var(--primary-blue); }
+
+/* ABAS */
+.abas-container { display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.tab-btn { padding: 6px 14px; cursor: pointer; border: 1px solid var(--border); border-radius: 4px; font-weight: bold; }
+.tab-btn.active { background: var(--primary-blue); color: white; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* BOTÕES AÇÃO */
+.btn-inscrever, .btn-comprar { margin-top: 10px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; transition: 0.3s; }
+.btn-inscrever { background: var(--primary-blue); }
+.btn-comprar { background: var(--success-green); width: 100%; }
+
+/* PÓDIO E RANKING */
+.podium-container { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin: 20px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+.podium-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.podium-bar { width: 100%; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; border-radius: 5px 5px 0 0; }
+.gold .podium-bar { height: 70px; background: #FFD700; }
+.silver .podium-bar { height: 50px; background: #C0C0C0; }
+.bronze .podium-bar { height: 35px; background: #CD7F32; }
+.ranking-list-extended { list-style: none; padding: 0; }
+.ranking-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted var(--border); }
+.badge { background: #ffc107; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+
+/* TURMAS */
+.barra-fundo { background: #eee; height: 10px; border-radius: 10px; overflow: hidden; margin-top: 5px; }
+.barra-preenchimento { height: 100%; border-radius: 10px; }
+.btn-full { width: 100%; padding: 10px; background: var(--primary-blue); color: white; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+
+/* Layout de Coluna Única para a Loja */
+.main-content-single {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Banner de Saldo */
+.saldo-banner {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border: 1px solid var(--border);
+    border-left: 8px solid var(--success-green);
+}
+
+.saldo-info strong {
+    font-size: 1.4rem;
+    color: var(--success-green);
+    margin-left: 10px;
+}
+
+/* Grid de Produtos */
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.item-loja-card {
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.item-loja-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.img-produto img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.preco {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444;
+    margin: 10px 0;
+}
+
+.tag-laranja { background-color: #fd7e14; }
+
+.active-link {
+    color: var(--primary-blue) !important;
+    border-bottom: 2px solid var(--primary-blue);
+}
+
+/* Estilos do Perfil */
+.perfil-header {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    background: linear-gradient(to right, #ffffff, #f0f7ff);
+}
+
+.perfil-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--primary-blue);
+}
+
+.saldo-destaque {
+    display: inline-block;
+    margin-top: 10px;
+    background: var(--success-green);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Tabela de Histórico */
+.tabela-historico {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tabela-historico th, .tabela-historico td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.valor-positivo { color: var(--success-green); font-weight: bold; }
+.valor-negativo { color: #dc3545; font-weight: bold; }
+
+/* Grid de Conquistas */
+.conquistas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    text-align: center;
+}
+
+.conquista-item {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.badge-icon { font-size: 1.5rem; margin-bottom: 5px; }
+
+.conquista-item.bloqueada {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
+
+.btn-secondary { background: #6c757d; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+.btn-danger { background: #dc3545; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+
+/* Header do Ranking com busca */
+.ranking-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.controles-ranking {
+    display: flex;
+    gap: 10px;
+}
+
+.controles-ranking input {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    outline: none;
+}
+
+/* Tabela de Ranking */
+.tabela-container {
+    overflow-x: auto; /* Scroll para celulares */
+}
+
+.tabela-ranking {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela-ranking th {
+    background-color: #f1f3f5;
+    padding: 15px;
+    text-align: left;
+    color: var(--primary-blue);
+    font-weight: bold;
+    border-bottom: 2px solid var(--border);
+}
+
+.tabela-ranking td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.linha-aluno:hover {
+    background-color: #f8f9fa;
+}
+
+.valor-eco {
+    font-weight: bold;
+    color: var(--success-green);
+}
+
+/* Grid de Ranking de Turmas */
+.turmas-ranking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.turma-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    border-top: 5px solid #eee;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.posicao-turma {
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.turma-card h3 {
+    margin: 10px 0;
+    color: var(--text-dark);
+}
+
+.peso-total {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--primary-blue);
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Bordas Metais */
+.gold-border { border-top-color: #FFD700; background: linear-gradient(to bottom, #fffcf0, #fff); }
+.silver-border { border-top-color: #C0C0C0; }
+.bronze-border { border-top-color: #CD7F32; }
+
+/* Barra de progresso simplificada para os cards */
+.barra-fundo-mini {
+    background: #eee;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
