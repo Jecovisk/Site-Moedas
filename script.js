@@ -1,180 +1,238 @@
-// ==========================================
-// 1. CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
-// ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbx428DLzzvUR87YlascQsFtviMhfHT0q7vf21-UPoor88xSAAHJeWYIjQM9T8eOlWn9/exec"; 
-let dadosAlunos = [];
-let slideIndex = 0;
-
-// Lista de Eventos para as abas (1, 2, 3...)
-const listaEventos = [
-    { titulo: "🏆 Oficina de Reciclagem", desc: "Aprenda a transformar garrafas PET em objetos decorativos e úteis.", info: "Data: 20/03 | Local: Pátio Central" },
-    { titulo: "🌱 Plantio Sustentável", desc: "Vamos revitalizar o jardim da escola com mudas trazidas pelos alunos.", info: "Data: 25/03 | Local: Horta do CIEP" },
-    { titulo: "📊 Grande Pesagem", desc: "Último dia do mês para entrega de recicláveis e contagem de pontos.", info: "Data: 31/03 | Local: Portaria Principal" },
-    { titulo: "🎬 Cine Eco", desc: "Exibição de documentário sobre o meio ambiente com pipoca grátis.", info: "Data: 05/04 | Local: Auditório" },
-    { titulo: "🛍️ Feira de Trocas", desc: "Use seus EcoCoins para resgatar prêmios físicos na nossa feirinha.", info: "Data: 10/04 | Local: Quadra" }
-];
-
-// ==========================================
-// 2. INICIALIZAÇÃO DO SITE
-// ==========================================
-async function inicializarSite() {
-    console.log("EcoCoin CIEP 386 - Sistema Iniciado");
-    
-    // Inicia funções visuais imediatas
-    iniciarSlideshow();
-    
-    // Busca dados da planilha do Google
-    await carregarDadosPlanilha();
-    
-    // Atualiza os componentes que dependem dos dados
-    renderizarRankingLateral();
-    
-    // Se estiver na página de Ranking Geral, preenche a tabela
-    if (document.getElementById('corpoTabelaRanking')) {
-        renderizarTabelaCompleta();
-    }
-    
-    // Se estiver na página de Perfil, preenche os dados do aluno
-    if (document.getElementById('nomeAluno')) {
-        preencherDadosPerfil();
-    }
+}
+/* ==========================================
+   1. VARIÁVEIS E CONFIGURAÇÕES GERAIS
+   ========================================== */
+:root {
+    --primary-blue: #0056b3;
+    --primary-dark: #003d80;
+    --success-green: #28a745;
+    --bg-light: #f0f2f5;
+    --white: #ffffff;
+    --text-dark: #1c1e21;
+    --text-gray: #65676b;
+    --border: #dddfe2;
+    --gold: #ffdf00;
 }
 
-// ==========================================
-// 3. CONEXÃO COM GOOGLE SHEETS
-// ==========================================
-async function carregarDadosPlanilha() {
-    try {
-        const resposta = await fetch(API_URL);
-        dadosAlunos = await resposta.json();
-        console.log("Dados sincronizados com a planilha!");
-    } catch (erro) {
-        console.error("Erro ao carregar planilha:", erro);
-        // Fallback: se a planilha falhar, tenta usar o que está no cache
-        const cache = localStorage.getItem('dadosAlunosCache');
-        if (cache) dadosAlunos = JSON.parse(cache);
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.5;
 }
 
-// ==========================================
-// 4. SLIDESHOW AUTOMÁTICO
-// ==========================================
-function iniciarSlideshow() {
-    let slides = document.getElementsByClassName("mySlides");
-    if (slides.length === 0) return;
-
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    
-    slideIndex++;
-    if (slideIndex > slides.length) { slideIndex = 1; }
-    
-    slides[slideIndex - 1].style.display = "block";
-    setTimeout(iniciarSlideshow, 5000); // Troca a cada 5 segundos
+/* ==========================================
+   2. CABEÇALHO (NAV)
+   ========================================== */
+header {
+    background: var(--white);
+    padding: 12px 0;
+    border-bottom: 3px solid var(--primary-blue);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-function plusSlides(n) {
-    let slides = document.getElementsByClassName("mySlides");
-    slideIndex += n;
-    if (slideIndex > slides.length) slideIndex = 1;
-    if (slideIndex < 1) slideIndex = slides.length;
-    
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slides[slideIndex - 1].style.display = "block";
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
 }
 
-// ==========================================
-// 5. SISTEMA DE ABAS DE EVENTOS (ESTILO PRINT)
-// ==========================================
-function mostrarEvento(num) {
-    // Atualiza o estado visual dos números (1, 2, 3...)
-    const numeros = document.querySelectorAll('.num');
-    numeros.forEach(n => n.classList.remove('active'));
-    
-    // O índice do array é num - 1
-    if (numeros[num - 1]) {
-        numeros[num - 1].classList.add('active');
-    }
-
-    // Altera o texto do card de evento
-    const evento = listaEventos[num - 1];
-    if (evento) {
-        document.getElementById('evento-titulo').innerText = evento.titulo;
-        document.querySelector('.desc').innerText = evento.desc;
-        document.querySelector('.info-footer').innerText = evento.info;
-    }
+.logo-text { 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    color: var(--primary-blue); 
+    letter-spacing: -1px;
 }
 
-// ==========================================
-// 6. RANKINGS (LATERAL E GERAL)
-// ==========================================
-function renderizarRankingLateral() {
-    const lista = document.getElementById('podium-alunos-home');
-    if (!lista || dadosAlunos.length === 0) return;
+nav ul { list-style: none; display: flex; gap: 25px; }
+nav a { 
+    text-decoration: none; 
+    color: var(--text-dark); 
+    font-weight: 600; 
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+nav a:hover, nav a.active-link { color: var(--primary-blue); }
 
-    // Ordena por saldo (maior para menor) e pega o Top 5
-    const top5 = [...dadosAlunos].sort((a, b) => b.saldo - a.saldo).slice(0, 5);
-
-    lista.innerHTML = top5.map((aluno, index) => `
-        <li>
-            <span>${index + 1}. ${aluno.nome}</span>
-            <span class="badge-coin">${aluno.saldo} 🪙</span>
-        </li>
-    `).join('');
+/* ==========================================
+   3. LAYOUT EM COLUNAS (HOME)
+   ========================================== */
+.main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1.8fr 1fr; /* Coluna maior na esquerda */
+    gap: 20px;
+    padding: 0 20px;
 }
 
-function renderizarTabelaCompleta() {
-    const corpo = document.getElementById('corpoTabelaRanking');
-    const busca = document.getElementById('buscaNome')?.value.toLowerCase() || "";
-    
-    // Ordena por saldo
-    let filtrados = [...dadosAlunos].sort((a, b) => b.saldo - a.saldo);
-    
-    // Aplica busca se houver
-    if (busca) {
-        filtrados = filtrados.filter(a => a.nome.toLowerCase().includes(busca));
-    }
-
-    corpo.innerHTML = filtrados.map((aluno, index) => `
-        <tr class="linha-aluno" data-turma="${aluno.turma}">
-            <td>${index + 1}º</td>
-            <td>${aluno.nome}</td>
-            <td>${aluno.turma}</td>
-            <td class="valor-eco">${aluno.saldo.toFixed(2)}</td>
-        </tr>
-    `).join('');
+/* Layout para páginas de tela cheia (Loja/Ranking Geral) */
+.main-content-single {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
 }
 
-// ==========================================
-// 7. LOGIN E PERFIL
-// ==========================================
-function fazerLogin() {
-    const matricula = document.getElementById('inputMatricula').value;
-    const aluno = dadosAlunos.find(a => a.matricula.toString() === matricula);
-
-    if (aluno) {
-        localStorage.setItem('usuarioLogado', JSON.stringify(aluno));
-        window.location.href = 'perfil.html';
-    } else {
-        alert("Matrícula não encontrada! Verifique os dados com a secretaria.");
-    }
+.card {
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 20px;
 }
 
-function preencherDadosPerfil() {
-    const aluno = JSON.parse(localStorage.getItem('usuarioLogado'));
-    if (!aluno) {
-        window.location.href = 'index.html';
-        return;
-    }
-    document.getElementById('nomeAluno').innerText = aluno.nome;
-    document.getElementById('turmaAluno').innerText = aluno.turma;
-    document.getElementById('saldoAluno').innerText = `🪙 ${aluno.saldo.toFixed(2)} EcoCoins`;
+/* ==========================================
+   4. SLIDESHOW (TOPO ESQUERDA)
+   ========================================== */
+.slideshow-container {
+    position: relative;
+    height: 320px;
+    padding: 0 !important; /* Remove padding do card para a imagem sangrar */
+    overflow: hidden;
 }
 
-// ==========================================
-// DISPARO NO CARREGAMENTO
-// ==========================================
-window.onload = inicializarSite;
+.mySlides { display: none; height: 100%; }
+.mySlides img { width: 100%; height: 100%; object-fit: cover; }
+
+.slide-caption {
+    position: absolute; bottom: 0; background: rgba(0,0,0,0.7);
+    color: white; width: 100%; padding: 15px; font-weight: bold;
+}
+
+.prev, .next {
+    cursor: pointer; position: absolute; top: 50%; padding: 16px;
+    color: white; font-weight: bold; transform: translateY(-50%);
+    text-decoration: none; border-radius: 0 3px 3px 0;
+}
+.next { right: 0; border-radius: 3px 0 0 3px; }
+.prev:hover, .next:hover { background: rgba(0,0,0,0.8); }
+
+/* ==========================================
+   5. SISTEMA DE ABAS E EVENTOS (ESTILO PRINT)
+   ========================================== */
+.aba-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+}
+
+.num { color: #999; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+.num.active { color: var(--primary-blue); border-bottom: 2px solid var(--primary-blue); }
+
+.tag-azul { background: var(--primary-blue); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+.tag-verde { background: var(--success-green); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+
+.content-box h2 { margin: 12px 0; font-size: 1.5rem; color: #111; }
+.desc { color: var(--text-gray); margin-bottom: 20px; min-height: 50px; }
+.info-footer { font-size: 0.85rem; color: #888; font-weight: 600; border-top: 1px solid #eee; padding-top: 10px; }
+
+/* ==========================================
+   6. RANKINGS LATERAIS (DIREITA)
+   ========================================== */
+.ranking-title {
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--primary-blue);
+    display: inline-block;
+}
+
+.ranking-list { list-style: none; }
+.ranking-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 0.95rem;
+}
+
+.badge-coin {
+    background: #fff3cd;
+    color: #856404;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    border: 1px solid #ffeeba;
+}
+
+.btn-ranking {
+    width: 100%;
+    margin-top: 15px;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.btn-ranking:hover { background: var(--primary-dark); }
+
+/* ==========================================
+   7. LOJA (GRID DE PRODUTOS)
+   ========================================== */
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.item-loja-card { text-align: center; transition: 0.3s; }
+.item-loja-card:hover { transform: translateY(-5px); }
+
+.item-loja-card img { width: 100%; border-radius: 8px; margin-bottom: 15px; }
+
+.preco-tag {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--success-green);
+    margin: 10px 0;
+}
+
+/* ==========================================
+   8. TABELAS (RANKING GERAL)
+   ========================================== */
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
+th { background: #f8f9fa; color: var(--primary-blue); font-weight: bold; }
+tr:hover { background: #f9f9f9; }
+
+/* ==========================================
+   9. PERFIL E LOGIN
+   ========================================== */
+.login-mini { display: flex; flex-direction: column; gap: 10px; }
+.login-mini input { padding: 12px; border: 1px solid var(--border); border-radius: 6px; }
+.login-mini button { 
+    background: var(--success-green); 
+    color: white; border: none; 
+    padding: 12px; border-radius: 6px; 
+    font-weight: bold; cursor: pointer; 
+}
+
+.perfil-header { display: flex; align-items: center; gap: 20px; }
+.perfil-avatar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--primary-blue); }
+
+/* ==========================================
+   10. RESPONSIVIDADE
+   ========================================== */
+@media (max-width: 850px) {
+    .main-content { grid-template-columns: 1fr; }
+    .col-direita { order: -1; } /* Ranking sobe no mobile */
+    .slideshow-container { height: 200px; }
+}
