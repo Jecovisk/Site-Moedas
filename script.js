@@ -1,154 +1,180 @@
 // ==========================================
-// CONFIGURAÇÕES GERAIS
+// 1. CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
 // ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbzwJUBfJSF8jKutZhUKaYJ2tfru9MbLyrnCl4vaufPv8KMwJ_3H0y1OdCdU4rP6yuzA0w/exec";
-let dadosAlunos = []; // Armazena os dados vindos da planilha
+const API_URL = "https://script.google.com/macros/s/AKfycbx428DLzzvUR87YlascQsFtviMhfHT0q7vf21-UPoor88xSAAHJeWYIjQM9T8eOlWn9/exec"; 
+let dadosAlunos = [];
+let slideIndex = 0;
+
+// Lista de Eventos para as abas (1, 2, 3...)
+const listaEventos = [
+    { titulo: "🏆 Oficina de Reciclagem", desc: "Aprenda a transformar garrafas PET em objetos decorativos e úteis.", info: "Data: 20/03 | Local: Pátio Central" },
+    { titulo: "🌱 Plantio Sustentável", desc: "Vamos revitalizar o jardim da escola com mudas trazidas pelos alunos.", info: "Data: 25/03 | Local: Horta do CIEP" },
+    { titulo: "📊 Grande Pesagem", desc: "Último dia do mês para entrega de recicláveis e contagem de pontos.", info: "Data: 31/03 | Local: Portaria Principal" },
+    { titulo: "🎬 Cine Eco", desc: "Exibição de documentário sobre o meio ambiente com pipoca grátis.", info: "Data: 05/04 | Local: Auditório" },
+    { titulo: "🛍️ Feira de Trocas", desc: "Use seus EcoCoins para resgatar prêmios físicos na nossa feirinha.", info: "Data: 10/04 | Local: Quadra" }
+];
 
 // ==========================================
-// 1. CARREGAMENTO DE DADOS (BACK-END)
+// 2. INICIALIZAÇÃO DO SITE
 // ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbx428DLzzvUR87YlascQsFtviMhfHT0q7vf21-UPoor88xSAAHJeWYIjQM9T8eOlWn9/exec"; // Use o URL que termina em /exec
-
-async function carregarDados() {
-    try {
-        // O segredo está no 'redirect: follow'
-        const resposta = await fetch(API_URL);
-        
-        if (!resposta.ok) throw new Error('Erro ao acessar a planilha');
-
-        dadosAlunos = await resposta.json();
-        console.log("Dados recebidos com sucesso:", dadosAlunos);
-
-        // Dispara as atualizações visuais
-        renderizarTudo();
-
-    } catch (erro) {
-        console.error("Erro no carregamento:", erro);
-        // Tente usar um proxy se o erro persistir (comum em servidores locais)
-        console.log("Dica: Se rodar direto do arquivo HTML no PC, o navegador pode bloquear. Tente usar a extensão 'Live Server' no VS Code.");
+async function inicializarSite() {
+    console.log("EcoCoin CIEP 386 - Sistema Iniciado");
+    
+    // Inicia funções visuais imediatas
+    iniciarSlideshow();
+    
+    // Busca dados da planilha do Google
+    await carregarDadosPlanilha();
+    
+    // Atualiza os componentes que dependem dos dados
+    renderizarRankingLateral();
+    
+    // Se estiver na página de Ranking Geral, preenche a tabela
+    if (document.getElementById('corpoTabelaRanking')) {
+        renderizarTabelaCompleta();
+    }
+    
+    // Se estiver na página de Perfil, preenche os dados do aluno
+    if (document.getElementById('nomeAluno')) {
+        preencherDadosPerfil();
     }
 }
 
-// Função para garantir que tudo seja preenchido
-function renderizarTudo() {
-    if (document.querySelector('.podium-container')) renderizarPodio();
-    if (document.getElementById('tabelaGeral')) renderizarTabelaRanking();
-    if (document.querySelector('.perfil-header')) carregarPerfil();
+// ==========================================
+// 3. CONEXÃO COM GOOGLE SHEETS
+// ==========================================
+async function carregarDadosPlanilha() {
+    try {
+        const resposta = await fetch(API_URL);
+        dadosAlunos = await resposta.json();
+        console.log("Dados sincronizados com a planilha!");
+    } catch (erro) {
+        console.error("Erro ao carregar planilha:", erro);
+        // Fallback: se a planilha falhar, tenta usar o que está no cache
+        const cache = localStorage.getItem('dadosAlunosCache');
+        if (cache) dadosAlunos = JSON.parse(cache);
+    }
 }
 
 // ==========================================
-// 2. SISTEMA DE LOGIN
+// 4. SLIDESHOW AUTOMÁTICO
+// ==========================================
+function iniciarSlideshow() {
+    let slides = document.getElementsByClassName("mySlides");
+    if (slides.length === 0) return;
+
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    
+    slideIndex++;
+    if (slideIndex > slides.length) { slideIndex = 1; }
+    
+    slides[slideIndex - 1].style.display = "block";
+    setTimeout(iniciarSlideshow, 5000); // Troca a cada 5 segundos
+}
+
+function plusSlides(n) {
+    let slides = document.getElementsByClassName("mySlides");
+    slideIndex += n;
+    if (slideIndex > slides.length) slideIndex = 1;
+    if (slideIndex < 1) slideIndex = slides.length;
+    
+    for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
+    slides[slideIndex - 1].style.display = "block";
+}
+
+// ==========================================
+// 5. SISTEMA DE ABAS DE EVENTOS (ESTILO PRINT)
+// ==========================================
+function mostrarEvento(num) {
+    // Atualiza o estado visual dos números (1, 2, 3...)
+    const numeros = document.querySelectorAll('.num');
+    numeros.forEach(n => n.classList.remove('active'));
+    
+    // O índice do array é num - 1
+    if (numeros[num - 1]) {
+        numeros[num - 1].classList.add('active');
+    }
+
+    // Altera o texto do card de evento
+    const evento = listaEventos[num - 1];
+    if (evento) {
+        document.getElementById('evento-titulo').innerText = evento.titulo;
+        document.querySelector('.desc').innerText = evento.desc;
+        document.querySelector('.info-footer').innerText = evento.info;
+    }
+}
+
+// ==========================================
+// 6. RANKINGS (LATERAL E GERAL)
+// ==========================================
+function renderizarRankingLateral() {
+    const lista = document.getElementById('podium-alunos-home');
+    if (!lista || dadosAlunos.length === 0) return;
+
+    // Ordena por saldo (maior para menor) e pega o Top 5
+    const top5 = [...dadosAlunos].sort((a, b) => b.saldo - a.saldo).slice(0, 5);
+
+    lista.innerHTML = top5.map((aluno, index) => `
+        <li>
+            <span>${index + 1}. ${aluno.nome}</span>
+            <span class="badge-coin">${aluno.saldo} 🪙</span>
+        </li>
+    `).join('');
+}
+
+function renderizarTabelaCompleta() {
+    const corpo = document.getElementById('corpoTabelaRanking');
+    const busca = document.getElementById('buscaNome')?.value.toLowerCase() || "";
+    
+    // Ordena por saldo
+    let filtrados = [...dadosAlunos].sort((a, b) => b.saldo - a.saldo);
+    
+    // Aplica busca se houver
+    if (busca) {
+        filtrados = filtrados.filter(a => a.nome.toLowerCase().includes(busca));
+    }
+
+    corpo.innerHTML = filtrados.map((aluno, index) => `
+        <tr class="linha-aluno" data-turma="${aluno.turma}">
+            <td>${index + 1}º</td>
+            <td>${aluno.nome}</td>
+            <td>${aluno.turma}</td>
+            <td class="valor-eco">${aluno.saldo.toFixed(2)}</td>
+        </tr>
+    `).join('');
+}
+
+// ==========================================
+// 7. LOGIN E PERFIL
 // ==========================================
 function fazerLogin() {
     const matricula = document.getElementById('inputMatricula').value;
-    
-    // Procura o aluno na lista carregada da planilha
     const aluno = dadosAlunos.find(a => a.matricula.toString() === matricula);
-    
+
     if (aluno) {
-        // Guarda os dados no navegador para usar em outras páginas
-        localStorage.setItem('alunoLogado', JSON.stringify(aluno));
+        localStorage.setItem('usuarioLogado', JSON.stringify(aluno));
         window.location.href = 'perfil.html';
     } else {
-        alert("Matrícula não encontrada! Verifique o número ou fale com a coordenação.");
+        alert("Matrícula não encontrada! Verifique os dados com a secretaria.");
     }
 }
 
-function carregarPerfil() {
-    const aluno = JSON.parse(localStorage.getItem('alunoLogado'));
+function preencherDadosPerfil() {
+    const aluno = JSON.parse(localStorage.getItem('usuarioLogado'));
     if (!aluno) {
-        window.location.href = 'index.html'; // Se não estiver logado, volta pro início
+        window.location.href = 'index.html';
         return;
     }
-    // Preenche os campos do perfil (IDs devem existir no HTML do perfil)
     document.getElementById('nomeAluno').innerText = aluno.nome;
     document.getElementById('turmaAluno').innerText = aluno.turma;
-    document.getElementById('saldoAluno').innerText = `🪙 ${aluno.saldo}.00 EcoCoins`;
+    document.getElementById('saldoAluno').innerText = `🪙 ${aluno.saldo.toFixed(2)} EcoCoins`;
 }
 
 // ==========================================
-// 3. SLIDESHOW (HOME)
+// DISPARO NO CARREGAMENTO
 // ==========================================
-let slideIndex = 1;
-function plusSlides(n) { showSlides(slideIndex += n); }
-function currentSlide(n) { showSlides(slideIndex = n); }
-
-function showSlides(n) {
-    let slides = document.getElementsByClassName("mySlides");
-    let dots = document.getElementsByClassName("dot");
-    if (!slides.length) return; // Sai da função se não estiver na home
-
-    if (n > slides.length) slideIndex = 1;
-    if (n < 1) slideIndex = slides.length;
-    
-    for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
-    for (let i = 0; i < dots.length; i++) dots[i].className = dots[i].className.replace(" active", "");
-    
-    slides[slideIndex-1].style.display = "block";
-    if (dots.length > 0) dots[slideIndex-1].className += " active";
-}
-
-// ==========================================
-// 4. FILTROS E INTERATIVIDADE
-// ==========================================
-
-// Filtro da Loja
-function filtrarLoja() {
-    const filtro = document.getElementById('categoriaLoja').value.toLowerCase();
-    const produtos = document.querySelectorAll('.item-loja-card');
-
-    produtos.forEach(prod => {
-        const categoria = prod.querySelector('.categoria-tag').innerText.toLowerCase();
-        prod.style.display = (filtro === 'todos' || categoria.includes(filtro)) ? 'block' : 'none';
-    });
-}
-
-// Filtro do Ranking Geral (Busca + Turma)
-function filtrarRankingCompleto() {
-    const busca = document.getElementById('buscaNome').value.toLowerCase();
-    const turma = document.getElementById('filtroTurmaGeral').value;
-    const linhas = document.querySelectorAll('.linha-aluno');
-
-    linhas.forEach(linha => {
-        const nome = linha.children[1].innerText.toLowerCase();
-        const tAluno = linha.getAttribute('data-turma');
-        const bateBusca = nome.includes(busca);
-        const bateTurma = (turma === 'todas' || tAluno === turma);
-        linha.style.display = (bateBusca && bateTurma) ? "" : "none";
-    });
-}
-
-// Alternar Abas (Eventos/Loja na Home)
-function alternarConteudo(tipo, index, btn) {
-    const card = btn.closest('.card');
-    card.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`${tipo}-${index}`).classList.add('active');
-    btn.classList.add('active');
-}
-
-// ==========================================
-// 5. AÇÕES DE COMPRA E INSCRIÇÃO
-// ==========================================
-function inscreverEvento(url) { window.open(url, '_blank'); }
-function comprarItem(url) { 
-    const aluno = JSON.parse(localStorage.getItem('alunoLogado'));
-    if (!aluno) {
-        alert("Você precisa estar logado para comprar!");
-        return;
-    }
-    window.open(url, '_blank'); 
-}
-
-// ==========================================
-// INICIALIZAÇÃO AUTOMÁTICA
-// ==========================================
-window.onload = () => {
-    carregarDados(); // Puxa os dados da planilha
-    
-    // Inicia o Slideshow se existir na página
-    if (document.getElementsByClassName("mySlides").length > 0) {
-        showSlides(slideIndex);
-        setInterval(() => plusSlides(1), 5000);
-    }
-};
+window.onload = inicializarSite;
