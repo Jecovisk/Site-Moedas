@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - EcoCoin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo-text">386 <span style="color: #28a745;">EcoCoin</span></div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="loja.html">Loja</a></li>
+                    <li><a href="ranking.html">Ranking</a></li>
+                    <li><a href="perfil.html" class="active-link">Perfil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        
+        <section>
+            <div class="card perfil-header">
+                <div class="perfil-avatar">
+                    <img src="https://via.placeholder.com/150/0056b3/ffffff?text=ESTUDANTE" alt="Foto do Aluno">
+                </div>
+                <div class="perfil-info">
+                    <h1 id="nomeAluno">Carregando...</h1>
+                    <p>Turma: <strong id="turmaAluno">---</strong></p>
+                    <span class="saldo-destaque" id="saldoAluno">🪙 0.00 EcoCoins</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-title">📜 Últimas Atividades</span>
+                <table class="tabela-historico">
+                    <thead>
+                        <tr>
+                            <th>Ação</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sincronização com Planilha</td>
+                            <td class="valor-positivo">OK</td>
+                        </tr>
+                        <tr>
+                            <td>Bônus de Cadastro</td>
+                            <td class="valor-positivo">+10.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <aside>
+            <div class="card">
+                <span class="card-title">🏅 Minhas Conquistas</span>
+                <div class="conquistas-grid">
+                    <div class="conquista-item" title="Primeiro acesso ao portal">
+                        <div class="badge-icon">🚀</div>
+                        <small>Pioneiro</small>
+                    </div>
+                    <div class="conquista-item bloqueada" title="Doe 5kg de recicláveis">
+                        <div class="badge-icon">🌿</div>
+                        <small>Eco-Herói</small>
+                    </div>
+                    <div class="conquista-item bloqueada" title="Faça sua primeira compra">
+                        <div class="badge-icon">🛍️</div>
+                        <small>Consumidor</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-title">⚙️ Opções</span>
+                <button class="btn-full-width btn-danger" onclick="logout()">Sair da Conta</button>
+            </div>
+        </aside>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Lógica específica para carregar os dados do aluno logado
+        window.onload = () => {
+            const alunoLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+            if (!alunoLogado) {
+                // Se não houver ninguém logado, volta para a home
+                alert("Por favor, faça login primeiro!");
+                window.location.href = 'index.html';
+            } else {
+                // Preenche o HTML com os dados da Planilha/localStorage
+                document.getElementById('nomeAluno').innerText = alunoLogado.nome;
+                document.getElementById('turmaAluno').innerText = alunoLogado.turma;
+                document.getElementById('saldoAluno').innerText = `🪙 ${alunoLogado.saldo.toFixed(2)} EcoCoins`;
+            }
+        };
+
+        function logout() {
+            localStorage.removeItem('usuarioLogado');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
