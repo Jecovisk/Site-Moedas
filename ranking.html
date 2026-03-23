@@ -3,114 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranking Geral - EcoCoin 386</title>
+    <title>Ranking Geral - EcoCoin CIEP 386</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
         <div class="nav-container">
-            <div class="logo-text">386 <span style="color: #28a745;">EcoCoin</span></div>
+            <div class="logo-text">386 <span style="color: #0056b3;">EcoCoin</span></div>
             <nav>
                 <ul>
-                    <li><a href="index.html">Início</a></li>
-                    <li><a href="loja.html">Loja</a></li>
-                    <li><a href="ranking.html" class="active-link">Ranking</a></li>
-                    <li><a href="perfil.html">Perfil</a></li>
+                    <li><a href="index.html">INÍCIO</a></li>
+                    <li><a href="loja.html">LOJA</a></li>
+                    <li><a href="ranking.html" class="active-link">RANKING</a></li>
+                    <li><a href="perfil.html">PERFIL</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main class="main-content-single">
-        <div class="card">
-    <span class="card-title">🏆 Desempenho por Turma (Total Kg)</span>
-    <div class="turmas-ranking-grid">
         
-        <div class="turma-card gold-border">
-            <span class="posicao-turma">1º Lugar</span>
-            <h3>Turma 3001</h3>
-            <div class="stats">
-                <span class="peso-total">15.5 kg</span>
-                <div class="barra-fundo-mini"><div class="barra-preenchimento" style="width: 100%; background: #FFD700;"></div></div>
-            </div>
-        </div>
-
-        <div class="turma-card silver-border">
-            <span class="posicao-turma">2º Lugar</span>
-            <h3>Turma 2001</h3>
-            <div class="stats">
-                <span class="peso-total">12.2 kg</span>
-                <div class="barra-fundo-mini"><div class="barra-preenchimento" style="width: 78%; background: #C0C0C0;"></div></div>
-            </div>
-        </div>
-
-        <div class="turma-card bronze-border">
-            <span class="posicao-turma">3º Lugar</span>
-            <h3>Turma 1001</h3>
-            <div class="stats">
-                <span class="peso-total">9.8 kg</span>
-                <div class="barra-fundo-mini"><div class="barra-preenchimento" style="width: 63%; background: #CD7F32;"></div></div>
-            </div>
-        </div>
-
-    </div>
-</div>
         <div class="card">
-            <div class="ranking-header-flex">
-                <span class="card-title">Classificação Geral de Alunos</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div>
+                    <span class="tag-azul">🏆 Classificação</span>
+                    <h2 style="margin-top: 10px;">Ranking Geral de Alunos</h2>
+                    <p class="desc">Acompanhe o desempenho de todos os alunos do CIEP 386.</p>
+                </div>
                 
-                <div class="controles-ranking">
-                    <input type="text" id="buscaNome" placeholder="🔍 Buscar aluno..." onkeyup="filtrarRankingCompleto()">
-                    <select id="filtroTurmaGeral" onchange="filtrarRankingCompleto()">
-                        <option value="todas">Todas as Turmas</option>
-                        <option value="1001">1001</option>
-                        <option value="2001">2001</option>
-                        <option value="3001">3001</option>
-                    </select>
+                <div class="login-mini" style="flex-direction: row; align-items: center;">
+                    <input type="text" id="buscaNome" placeholder="🔍 Buscar aluno..." onkeyup="renderizarTabelaCompleta()" style="width: 250px;">
                 </div>
             </div>
+        </div>
 
-            <div class="tabela-container">
-                <table class="tabela-ranking" id="tabelaGeral">
-                    <thead>
-                        <tr>
-                            <th>Posição</th>
-                            <th>Nome do Aluno</th>
-                            <th>Turma</th>
-                            <th>EcoCoins 🪙</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="linha-aluno" data-turma="3001">
-                            <td><strong>1º</strong></td>
-                            <td>João Silva</td>
-                            <td>3001</td>
-                            <td class="valor-eco">150.00</td>
-                        </tr>
-                        <tr class="linha-aluno" data-turma="2001">
-                            <td><strong>2º</strong></td>
-                            <td>Maria Costa</td>
-                            <td>2001</td>
-                            <td class="valor-eco">132.00</td>
-                        </tr>
-                        <tr class="linha-aluno" data-turma="1001">
-                            <td><strong>3º</strong></td>
-                            <td>Pedro Alves</td>
-                            <td>1001</td>
-                            <td class="valor-eco">120.00</td>
-                        </tr>
-                        <tr class="linha-aluno" data-turma="3001">
-                            <td>4º</td>
-                            <td>Ana Clara</td>
-                            <td>3001</td>
-                            <td class="valor-eco">110.00</td>
-                        </tr>
-                        </tbody>
-                </table>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <table id="tabelaRankingGeral">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Nome do Aluno</th>
+                        <th>Turma</th>
+                        <th>EcoCoins 🪙</th>
+                    </tr>
+                </thead>
+                <tbody id="corpoTabelaRanking">
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: #999;">
+                            Sincronizando com a planilha do Google...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <span class="ranking-title">Resumo por Turma</span>
+            <div class="turmas-ranking-grid" style="margin-top: 20px;">
+                <div class="turma-card gold-border">
+                    <span class="tag-azul" style="background: #ffc107; color: #000;">1º Lugar</span>
+                    <h3>3001</h3>
+                    <p class="valor-eco">15.2 kg</p>
+                </div>
+                <div class="turma-card silver-border">
+                    <span class="tag-azul" style="background: #c0c0c0; color: #000;">2º Lugar</span>
+                    <h3>2002</h3>
+                    <p class="valor-eco">12.8 kg</p>
+                </div>
+                <div class="turma-card bronze-border">
+                    <span class="tag-azul" style="background: #cd7f32; color: #000;">3º Lugar</span>
+                    <h3>1001</h3>
+                    <p class="valor-eco">9.5 kg</p>
+                </div>
             </div>
         </div>
+
     </main>
+
+    <footer style="text-align: center; padding: 30px; color: #888; font-size: 0.8rem;">
+        &copy; 2026 CIEP 386 - Projeto Sustentabilidade Escolar. Dados atualizados via Google Sheets.
+    </footer>
 
     <script src="script.js"></script>
 </body>
